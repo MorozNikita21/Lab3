@@ -1,0 +1,49 @@
+package labs;
+
+import java.io.*;
+
+public class Lab3 {
+    public static void main(String[] args) {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("input3.txt"));
+            double a = Double.parseDouble(reader.readLine());
+            double b = Double.parseDouble(reader.readLine());
+            double step = Double.parseDouble(reader.readLine());
+            double epsilon = Double.parseDouble(reader.readLine());
+            reader.close();
+            BufferedWriter writer = new BufferedWriter(new FileWriter("output3.txt"));
+            double x = a;
+            while (x <= b) {
+                double root = calculateRoot(x, epsilon);
+                if (Math.abs(f(root)) <= epsilon) {
+                    writer.write(Double.toString(root));
+                    writer.newLine();
+                }
+                x += step;
+            }
+            writer.close();
+            System.out.println("Корни уравнения найдены и записаны в файл output3.txt");
+        } catch (FileNotFoundException e) {
+            System.out.println("Файл input3.txt не найден");
+        } catch (IOException e) {
+            System.out.println("Ошибка при чтении или записи файла");
+        }
+    }
+
+    private static double f(double x) {
+        return x * x - 5;
+    }
+
+    private static double calculateRoot(double x, double epsilon) {
+        double x0;
+        do {
+            x0 = x;
+            x = x - f(x) / fDerivative(x);
+        } while (Math.abs(x - x0) > epsilon);
+        return x;
+    }
+
+    private static double fDerivative(double x) {
+        return 2 * x;
+    }
+}
